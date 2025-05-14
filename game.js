@@ -262,9 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (acceptableAnswers.includes(normalizedUserGuess)) {
-            feedbackElement.textContent = `The correct county is ${correctAnswer}. You know your County Lines!`;
+            feedbackElement.textContent = `The correct district is ${correctAnswer}. You know your district Lines!`;
             feedbackElement.style.color = 'green';
-            showModal(`The correct county is ${correctAnswer}. You know your County Lines!`);
+            showModal(`The correct county is ${correctAnswer}. You know your district Lines!`);
             gameOver = true;
         } else {
             attemptsLeft--;
@@ -324,16 +324,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                distanceMessage += ` The desired county is ${directionToArrow[direction] || direction} of ${userGuess}.`;
+                distanceMessage += ` The desired district is ${directionToArrow[direction] || direction} of ${userGuess}.`;
             }
 
             feedbackElement.innerHTML = distanceMessage;
             feedbackElement.style.color = 'red';
 
             if (attemptsLeft === 0) {
-                feedbackElement.innerHTML = `Incorrect! The correct county is <span style="color: black;">${correctAnswer}</span>. You are in a Right State!`;
+                feedbackElement.innerHTML = `Incorrect! The correct district is <span style="color: black;">${correctAnswer}</span>. You are in a Right State!`;
                 feedbackElement.style.color = 'red';
-                showModal(`Incorrect! The correct county is ${correctAnswer}. You are in a Right State!`);
+                showModal(`Incorrect! The correct district is ${correctAnswer}. You are in a Right State!`);
                 gameOver = true;
             }
         }

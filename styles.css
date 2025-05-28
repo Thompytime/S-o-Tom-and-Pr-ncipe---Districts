@@ -48,13 +48,28 @@ h3 {
     width: 100%;
 }
 
+/* --- START OF CHANGES FOR IMAGE HEIGHT --- */
 #county-image {
     width: 100%;
     max-width: 500px;
-    height: auto;
+    height: auto; /* Allow aspect ratio to be maintained */
+    max-height: 50vh; /* LIMIT THE MAX HEIGHT TO 50% OF VIEWPORT HEIGHT */
+    object-fit: contain; /* Ensures the entire image is visible within its bounds */
     margin: 15px auto;
     display: block;
 }
+
+/* You might want a container for the image if it's not already well-constrained */
+/* If your image is inside a div, you can add similar constraints to that div: */
+/* .image-wrapper {
+    max-height: 60vh;
+    overflow-y: auto; /* Adds scrollbar only if image is too tall */
+/* display: flex; /* To center the image inside this wrapper */
+/* justify-content: center;
+    align-items: center;
+} */
+/* --- END OF CHANGES --- */
+
 
 .correct-answer {
     margin-bottom: 10px;
@@ -141,7 +156,7 @@ h3 {
 .incorrect-guesses-row {
     display: grid;
     grid-template-columns: 2fr 2fr 1fr 1fr;
-    gap: 4px; /* Increased for clarity */
+    gap: 4px;
     margin-bottom: 4px;
     align-items: center;
     word-break: break-word;
@@ -151,7 +166,7 @@ h3 {
 .distance,
 .percentage {
     width: 100%;
-    padding: 3px 4px; /* Slightly more padding */
+    padding: 3px 4px;
     font-size: 11px;
     text-align: center;
     border: 1px solid #ccc;
@@ -161,7 +176,7 @@ h3 {
     white-space: nowrap;
     height: 22px;
     line-height: 22px;
-    word-break: break-word; /* NEW */
+    word-break: break-word;
 }
 
 .direction-arrow-container {
@@ -306,7 +321,7 @@ h3 {
         padding: 10px;
     }
     .incorrect-guesses-row {
-        grid-template-columns: 2fr 2fr 1fr 1fr; /* Maintain proportions on smaller screens */
+        grid-template-columns: 2fr 2fr 1fr 1fr;
         gap: 1px;
     }
     .incorrect-guess,
@@ -314,11 +329,12 @@ h3 {
     .percentage {
         font-size: 9px;
         padding: 1px;
-        height: 18px; /* Enforce height */
-        line-height: 18px; /* Vertically center */
+        height: 18px;
+        line-height: 18px;
+        word-break: break-word;
     }
     .direction-arrow-container {
-        height: 18px; /* Enforce height */
+        height: 18px;
     }
     #attempts-left {
         font-size: 12px;
@@ -338,16 +354,18 @@ h3 {
 
 @media (max-width: 360px) {
     .incorrect-guesses-row {
-        grid-template-columns: 1.5fr 1.5fr 1fr 1fr; /* Adjust proportions */
+        grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+        gap: 1px; /* Ensure small gap on these screens */
     }
+    /* Removed individual width adjustments for distance/percentage to let grid handle it */
+    .direction-arrow-container {
+        width: 100%;
+    }
+    /* Ensure padding is sufficient but not too large on these smaller inputs */
+    .incorrect-guess,
     .distance,
     .percentage {
-        display: inline-block;
-        width: auto;
-        margin-right: 2px;
-    }
-    .direction-arrow-container {
-        width: 100%; /* Fill cell */
+        padding: 2px; /* Slightly more padding than 1px */
     }
 }
 

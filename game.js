@@ -1,102 +1,162 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const imageNameMap = {
-        'Água Grande_District': 'Água Grande',
-        'Cantagalo_District': 'Cantagalo',
-        'Lembá_District': 'Lembá',
-        'Lobata_District': 'Lobata',
-        'Mé-Zóchi_District': 'Mé-Zóchi',
-        'Pagué_District - Autonomous Region of Príncipe': 'Pagué',
-        'Caué_District': 'Caué'
-    };
+// --- 1. GLOBAL DATA DEFINITIONS ---
+// These variables MUST be defined outside the DOMContentLoaded listener.
 
-    const portugueseDistrictNames = [
-        "Água Grande",
-        "Cantagalo",
-        "Caué",
-        "Lembá",
-        "Lobata",
-        "Mé-Zóchi",
-        "Pagué",
-    ];
+const imageNameMap = {
+    'Água Grande_District': 'Água Grande',
+    'Cantagalo_District': 'Cantagalo',
+    'Lembá_District': 'Lembá',
+    'Lobata_District': 'Lobata',
+    'Mé-Zóchi_District': 'Mé-Zóchi',
+    'Pagué_District - Autonomous Region of Príncipe': 'Pagué',
+    'Caué_District': 'Caué'
+};
 
-    const countyData = {
-        "Água Grande": {
-            "Cantagalo": { "miles": 10, "kilometers": 16, "direction": "S" },
-            "Caué": { "miles": 23, "kilometers": 36, "direction": "S" },
-            "Lembá": { "miles": 17, "kilometers": 27, "direction": "SW" },
-            "Lobata": { "miles": 8, "kilometers": 12, "direction": "NW" },
-            "Mé-Zóchi": { "miles": 6, "kilometers": 10, "direction": "SW" },
-            "Pagué": { "miles": 112, "kilometers": 180, "direction": "N" }
-        },
-        "Cantagalo": {
-            "Água Grande": { "miles": 10, "kilometers": 16, "direction": "N" },
-            "Caué": { "miles": 15, "kilometers": 24, "direction": "S" },
-            "Lembá": { "miles": 25, "kilometers": 40, "direction": "W" },
-            "Lobata": { "miles": 15, "kilometers": 25, "direction": "NW" },
-            "Mé-Zóchi": { "miles": 8, "kilometers": 12, "direction": "W" },
-            "Pagué": { "miles": 109, "kilometers": 176, "direction": "N" }
-        },
-        "Caué": {
-            "Água Grande": { "miles": 23, "kilometers": 36, "direction": "N" },
-            "Cantagalo": { "miles": 15, "kilometers": 24, "direction": "N" },
-            "Lembá": { "miles": 18, "kilometers": 29, "direction": "NW" },
-            "Lobata": { "miles": 25, "kilometers": 40, "direction": "N" },
-            "Mé-Zóchi": { "miles": 18, "kilometers": 29, "direction": "N" },
-            "Pagué": { "miles": 106, "kilometers": 171, "direction": "N" }
-        },
-        "Lembá": {
-            "Água Grande": { "miles": 17, "kilometers": 27, "direction": "NE" },
-            "Cantagalo": { "miles": 25, "kilometers": 40, "direction": "E" },
-            "Caué": { "miles": 18, "kilometers": 29, "direction": "SE" },
-            "Lobata": { "miles": 12, "kilometers": 20, "direction": "NE" },
-            "Mé-Zóchi": { "miles": 12, "kilometers": 20, "direction": "E" },
-            "Pagué": { "miles": 106, "kilometers": 171, "direction": "N" }
-        },
-        "Lobata": {
-            "Água Grande": { "miles": 8, "kilometers": 12, "direction": "SE" },
-            "Cantagalo": { "miles": 15, "kilometers": 25, "direction": "SE" },
-            "Caué": { "miles": 25, "kilometers": 40, "direction": "S" },
-            "Lembá": { "miles": 12, "kilometers": 20, "direction": "SW" },
-            "Mé-Zóchi": { "miles": 9, "kilometers": 14, "direction": "S" },
-            "Pagué": { "miles": 112, "kilometers": 181, "direction": "N" }
-        },
-        "Mé-Zóchi": {
-            "Água Grande": { "miles": 6, "kilometers": 10, "direction": "NE" },
-            "Cantagalo": { "miles": 8, "kilometers": 12, "direction": "E" },
-            "Caué": { "miles": 18, "kilometers": 29, "direction": "S" },
-            "Lembá": { "miles": 12, "kilometers": 20, "direction": "W" },
-            "Lobata": { "miles": 9, "kilometers": 14, "direction": "N" },
-            "Pagué": { "miles": 109, "kilometers": 175, "direction": "N" }
-        },
-        "Pagué": {
-            "Água Grande": { "miles": 112, "kilometers": 180, "direction": "S" },
-            "Cantagalo": { "miles": 109, "kilometers": 176, "direction": "S" },
-            "Caué": { "miles": 106, "kilometers": 171, "direction": "S" },
-            "Lembá": { "miles": 106, "kilometers": 171, "direction": "S" },
-            "Lobata": { "miles": 112, "kilometers": 181, "direction": "S" },
-            "Mé-Zóchi": { "miles": 109, "kilometers": 175, "direction": "S" }
+const portugueseDistrictNames = [
+    "Água Grande",
+    "Cantagalo",
+    "Caué",
+    "Lembá",
+    "Lobata",
+    "Mé-Zóchi",
+    "Pagué",
+];
+
+const countyData = {
+    "Água Grande": {
+        "Cantagalo": { "miles": 10, "kilometers": 16, "direction": "S" },
+        "Caué": { "miles": 23, "kilometers": 36, "direction": "S" },
+        "Lembá": { "miles": 17, "kilometers": 27, "direction": "SW" },
+        "Lobata": { "miles": 8, "kilometers": 12, "direction": "NW" },
+        "Mé-Zóchi": { "miles": 6, "kilometers": 10, "direction": "SW" },
+        "Pagué": { "miles": 112, "kilometers": 180, "direction": "N" }
+    },
+    "Cantagalo": {
+        "Água Grande": { "miles": 10, "kilometers": 16, "direction": "N" },
+        "Caué": { "miles": 15, "kilometers": 24, "direction": "S" },
+        "Lembá": { "miles": 25, "kilometers": 40, "direction": "W" },
+        "Lobata": { "miles": 15, "kilometers": 25, "direction": "NW" },
+        "Mé-Zóchi": { "miles": 8, "kilometers": 12, "direction": "W" },
+        "Pagué": { "miles": 109, "kilometers": 176, "direction": "N" }
+    },
+    "Caué": {
+        "Água Grande": { "miles": 23, "kilometers": 36, "direction": "N" },
+        "Cantagalo": { "miles": 15, "kilometers": 24, "direction": "N" },
+        "Lembá": { "miles": 18, "kilometers": 29, "direction": "NW" },
+        "Lobata": { "miles": 25, "kilometers": 40, "direction": "N" },
+        "Mé-Zóchi": { "miles": 18, "kilometers": 29, "direction": "N" },
+        "Pagué": { "miles": 106, "kilometers": 171, "direction": "N" }
+    },
+    "Lembá": {
+        "Água Grande": { "miles": 17, "kilometers": 27, "direction": "NE" },
+        "Cantagalo": { "miles": 25, "kilometers": 40, "direction": "E" },
+        "Caué": { "miles": 18, "kilometers": 29, "direction": "SE" },
+        "Lobata": { "miles": 12, "kilometers": 20, "direction": "NE" },
+        "Mé-Zóchi": { "miles": 12, "kilometers": 20, "direction": "E" },
+        "Pagué": { "miles": 106, "kilometers": 171, "direction": "N" }
+    },
+    "Lobata": {
+        "Água Grande": { "miles": 8, "kilometers": 12, "direction": "SE" },
+        "Cantagalo": { "miles": 15, "kilometers": 25, "direction": "SE" },
+        "Caué": { "miles": 25, "kilometers": 40, "direction": "S" },
+        "Lembá": { "miles": 12, "kilometers": 20, "direction": "SW" },
+        "Mé-Zóchi": { "miles": 9, "kilometers": 14, "direction": "S" },
+        "Pagué": { "miles": 112, "kilometers": 181, "direction": "N" }
+    },
+    "Mé-Zóchi": {
+        "Água Grande": { "miles": 6, "kilometers": 10, "direction": "NE" },
+        "Cantagalo": { "miles": 8, "kilometers": 12, "direction": "E" },
+        "Caué": { "miles": 18, "kilometers": 29, "direction": "S" },
+        "Lembá": { "miles": 12, "kilometers": 20, "direction": "W" },
+        "Lobata": { "miles": 9, "kilometers": 14, "direction": "N" },
+        "Pagué": { "miles": 109, "kilometers": 175, "direction": "N" }
+    },
+    "Pagué": {
+        "Água Grande": { "miles": 112, "kilometers": 180, "direction": "S" },
+        "Cantagalo": { "miles": 109, "kilometers": 176, "direction": "S" },
+        "Caué": { "miles": 106, "kilometers": 171, "direction": "S" },
+        "Lembá": { "miles": 106, "kilometers": 171, "direction": "S" },
+        "Lobata": { "miles": 112, "kilometers": 181, "direction": "S" },
+        "Mé-Zóchi": { "miles": 109, "kilometers": 175, "direction": "S" }
+    }
+};
+
+const countyCoordinates = {
+    "Água Grande": { "lat": 0.3365, "lon": 6.7273 },
+    "Cantagalo": { "lat": 0.2167, "lon": 6.6833 },
+    "Caué": { "lat": 0.0167, "lon": 6.5333 },
+    "Lembá": { "lat": 0.2667, "lon": 6.5167 },
+    "Lobata": { "lat": 0.3667, "lon": 6.6333 },
+    "Mé-Zóchi": { "lat": 0.3000, "lon": 6.6500 },
+    "Pagué": { "lat": 1.6333, "lon": 7.4167 }
+};
+
+const countyImages = [
+    'Água Grande_District.svg',
+    'Cantagalo_District.svg',
+    'Lembá_District.svg',
+    'Lobata_District.svg',
+    'Mé-Zóchi_District.svg',
+    'Pagué_District - Autonomous Region of Príncipe.svg',
+    'Caué_District.svg'
+];
+
+// --- 2. DISTANCE CALCULATION FUNCTIONS AND MAX DISTANCE ---
+
+// Function to convert degrees to radians
+function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+// Haversine formula to calculate distance between two lat/lon points in km
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of Earth in kilometers
+
+    const dLat = toRadians(lat2 - lat1);
+    const dLon = toRadians(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const distance = R * c; // Distance in kilometers
+    return distance;
+}
+
+let maxCalculatedDistanceKm = 0;
+
+for (const countyA in countyCoordinates) {
+    if (countyCoordinates.hasOwnProperty(countyA)) {
+        const coordsA = countyCoordinates[countyA];
+        for (const countyB in countyCoordinates) {
+            if (countyCoordinates.hasOwnProperty(countyB)) {
+                if (countyA === countyB) {
+                    continue;
+                }
+                const coordsB = countyCoordinates[countyB];
+                const distance = calculateDistance(
+                    coordsA.lat,
+                    coordsA.lon,
+                    coordsB.lat,
+                    coordsB.lon
+                );
+                if (distance > maxCalculatedDistanceKm) {
+                    maxCalculatedDistanceKm = distance;
+                }
+            }
         }
-    };
+    }
+}
 
-    const countyCoordinates = {
-        "Água Grande": { "lat": 0.3365, "lon": 6.7273 },
-        "Cantagalo": { "lat": 0.2167, "lon": 6.6833 },
-        "Caué": { "lat": 0.0167, "lon": 6.5333 },
-        "Lembá": { "lat": 0.2667, "lon": 6.5167 },
-        "Lobata": { "lat": 0.3667, "lon": 6.6333 },
-        "Mé-Zóchi": { "lat": 0.3000, "lon": 6.6500 },
-        "Pagué": { "lat": 1.6333, "lon": 7.4167 }
-    };
+// Add a 5% buffer and round up to a whole number for maxDistanceKm
+const maxDistanceKm = Math.ceil(maxCalculatedDistanceKm * 1.05);
+console.log("Dynamically calculated maxDistanceKm for São Tomé and Príncipe:", maxDistanceKm, "km");
 
-    const countyImages = [
-        'Água Grande_District.svg',
-        'Cantagalo_District.svg',
-        'Lembá_District.svg',
-        'Lobata_District.svg',
-        'Mé-Zóchi_District.svg',
-        'Pagué_District - Autonomous Region of Príncipe.svg',
-        'Caué_District.svg'
-    ];
+
+// --- 3. DOMContentLoaded LISTENER ---
+document.addEventListener('DOMContentLoaded', () => {
 
     const countyNames = countyImages.map(image => image.replace('.svg', '').replace(' - Autonomous Region of Príncipe', ''));
 
@@ -129,9 +189,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCountyIndex = Math.floor(Math.random() * countyImages.length);
     let attemptsLeft = 5;
     let incorrectGuesses = [];
-    let correctAnswer = imageNameMap[countyImages[currentCountyIndex].replace('.svg', '')];
+    let correctAnswer = imageNameMap[countyImages[currentCountyIndex].replace('.svg', '').replace(' - Autonomous Region of Príncipe', '')]; // Ensure correct key is generated
     let gameOver = false;
-    const maxDistanceKm = 150;
+    // REMOVED: const maxDistanceKm = 150; // Now a global constant calculated dynamically
 
     countyImage.src = 'images SAO/' + countyImages[currentCountyIndex];
     attemptsLeftElement.textContent = `Attempts left: ${attemptsLeft}`;
@@ -253,18 +313,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const normalizedCorrectAnswer = correctAnswer.toLowerCase();
 
         const acceptableAnswers = [normalizedCorrectAnswer];
-        const englishVersion = countyImages[currentCountyIndex].replace('.svg', '').toLowerCase().replace(/_/g, ' ').replace(' district', '').replace(' - autonomous region of príncipe', '');
-        acceptableAnswers.push(englishVersion);
+        // Ensure this normalization matches the keys in imageNameMap
+        const imageFileNameWithoutSvg = countyImages[currentCountyIndex].replace('.svg', '');
+        const englishVersionDerived = imageFileNameWithoutSvg.toLowerCase()
+                                        .replace(/_/g, ' ')
+                                        .replace(' district', '')
+                                        .replace(' - autonomous region of príncipe', '');
+        acceptableAnswers.push(englishVersionDerived);
 
-        if (!portugueseDistrictNames.map(name => name.toLowerCase()).includes(normalizedUserGuess) && !countyImages.map(name => name.toLowerCase().replace(/_/g, ' ').replace('.svg', '').replace(' district', '').replace(' - autonomous region of príncipe', '')).includes(normalizedUserGuess)) {
-            showAlert("Unknown County!");
+
+        if (!portugueseDistrictNames.map(name => name.toLowerCase()).includes(normalizedUserGuess) && !Object.values(imageNameMap).map(name => name.toLowerCase()).includes(normalizedUserGuess) && !englishVersionDerived.includes(normalizedUserGuess)) {
+            showAlert("Unknown District!"); // Changed to District for São Tomé
             return;
         }
+
 
         if (acceptableAnswers.includes(normalizedUserGuess)) {
             feedbackElement.textContent = `The correct district is ${correctAnswer}. You know your district Lines!`;
             feedbackElement.style.color = 'green';
-            showModal(`The correct county is ${correctAnswer}. You know your district Lines!`);
+            showModal(`The correct district is ${correctAnswer}. You know your district Lines!`);
             gameOver = true;
         } else {
             attemptsLeft--;
@@ -368,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
         attemptsLeftElement.textContent = `Attempts left: ${attemptsLeft}`;
 
         currentCountyIndex = Math.floor(Math.random() * countyImages.length);
-        correctAnswer = imageNameMap[countyImages[currentCountyIndex].replace('.svg', '')];
+        correctAnswer = imageNameMap[countyImages[currentCountyIndex].replace('.svg', '').replace(' - Autonomous Region of Príncipe', '')]; // Adjusted key generation here as well
         countyImage.src = 'images SAO/' + countyImages[currentCountyIndex];
 
         guessInput.disabled = false;

@@ -154,6 +154,11 @@ for (const countyA in countyCoordinates) {
 const maxDistanceKm = Math.ceil(maxCalculatedDistanceKm * 1.05);
 console.log("Dynamically calculated maxDistanceKm for São Tomé and Príncipe:", maxDistanceKm, "km");
 
+// Helper function to generate correct key for imageNameMap lookup
+function generateImageKey(imageName) {
+    // Remove .svg extension only
+    return imageName.replace('.svg', '');
+}
 
 // --- 3. DOMContentLoaded LISTENER ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -189,9 +194,17 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCountyIndex = Math.floor(Math.random() * countyImages.length);
     let attemptsLeft = 5;
     let incorrectGuesses = [];
-    let correctAnswer = imageNameMap[countyImages[currentCountyIndex].replace('.svg', '').replace(' - Autonomous Region of Príncipe', '')]; // Ensure correct key is generated
+    // Fixed: Use correct key generation for imageNameMap lookup
+    let correctAnswer = imageNameMap[generateImageKey(countyImages[currentCountyIndex])];
     let gameOver = false;
-    // REMOVED: const maxDistanceKm = 150; // Now a global constant calculated dynamically
+
+    // Add safety check for correctAnswer
+    if (!correctAnswer) {
+        console.error('Failed to find correct answer for image:', countyImages[currentCountyIndex]);
+        console.error('Generated key:', generateImageKey(countyImages[currentCountyIndex]));
+        console.error('Available keys:', Object.keys(imageNameMap));
+        correctAnswer = 'Unknown'; // Fallback value
+    }
 
     countyImage.src = 'images SAO/' + countyImages[currentCountyIndex];
     attemptsLeftElement.textContent = `Attempts left: ${attemptsLeft}`;
@@ -304,6 +317,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Add safety check for correctAnswer
+        if (!correctAnswer || correctAnswer === 'Unknown') {
+            console.error('correctAnswer is invalid:', correctAnswer);
+            showAlert('Game error: Please refresh the page.');
+            return;
+        }
+
         const userGuess = guessInput.value.trim();
         if (!userGuess) {
             showAlert('Please enter a guess!');
@@ -314,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const acceptableAnswers = [normalizedCorrectAnswer];
         // Ensure this normalization matches the keys in imageNameMap
-        const imageFileNameWithoutSvg = countyImages[currentCountyIndex].replace('.svg', '');
+        const imageFileNameWithoutSvg = generateImageKey(countyImages[currentCountyIndex]);
         const englishVersionDerived = imageFileNameWithoutSvg.toLowerCase()
                                         .replace(/_/g, ' ')
                                         .replace(' district', '')
@@ -435,7 +455,15 @@ document.addEventListener('DOMContentLoaded', () => {
         attemptsLeftElement.textContent = `Attempts left: ${attemptsLeft}`;
 
         currentCountyIndex = Math.floor(Math.random() * countyImages.length);
-        correctAnswer = imageNameMap[countyImages[currentCountyIndex].replace('.svg', '').replace(' - Autonomous Region of Príncipe', '')]; // Adjusted key generation here as well
+        // Fixed: Use correct key generation for imageNameMap lookup
+        correctAnswer = imageNameMap[generateImageKey(countyImages[currentCountyIndex])];
+        
+        // Add safety check for correctAnswer on reload
+        if (!correctAnswer) {
+            console.error('Failed to find correct answer for image on reload:', countyImages[currentCountyIndex]);
+            correctAnswer = 'Unknown'; // Fallback value
+        }
+        
         countyImage.src = 'images SAO/' + countyImages[currentCountyIndex];
 
         guessInput.disabled = false;
